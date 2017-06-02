@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-use App\Aspect\LoggingAspect;
+use App\Aspect\ActivityAspect;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
 
@@ -14,11 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(LoggingAspect::class, function ($app) {
-            return new LoggingAspect($app->make(LoggerInterface::class));
+        $this->app->singleton(ActivityAspect::class, function ($app) {
+            return new ActivityAspect($app->make(LoggerInterface::class));
         });
 
-        $this->app->tag([LoggingAspect::class], 'goaop.aspect');
+        $this->app->tag([ActivityAspect::class], 'goaop.aspect');
     }
 
     public function boot()

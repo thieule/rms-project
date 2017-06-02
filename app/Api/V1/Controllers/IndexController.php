@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Controllers;
 use App\Api\V1\Models\Project;
+use App\Events\ExampleEvent;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -14,8 +15,14 @@ class IndexController extends BaseController
      */
     public function index()
     {
-        return Project::all();
+        $project = Project::all();
+//        $redis = app()->make('redis');
+//        $redis->set('project-name', $project[0]->name);
+//        return $redis->get('project-name');
+//        event(new ExampleEvent());
+        return $project;
     }
+
 
     /**
      * Add project
@@ -26,6 +33,7 @@ class IndexController extends BaseController
             'name' => 'required',
             'client' => 'required'
         ]);
+
         return Project::create($request->all());
     }
 
@@ -51,6 +59,7 @@ class IndexController extends BaseController
         ]);
 
         $project  = Project::find($id);
+
         $project->name = $request->input('name');
         $project->client = $request->input('client');
         $project->desc = $request->input('desc');
@@ -59,7 +68,7 @@ class IndexController extends BaseController
         $project->estimate_type = $request->input('estimate_type');
         $project->estimate_resource = $request->input('estimate_resource');
         $project->save();
-
+        event(new ExampleEvent($project));
         return $project;
     }
 

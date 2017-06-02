@@ -6,11 +6,10 @@ use Go\Aop\Aspect;
 use Go\Aop\Intercept\MethodInvocation;
 use Go\Lang\Annotation\Before;
 use Psr\Log\LoggerInterface;
-
 /**
  * Application logging aspect
  */
-class QueueAspect implements Aspect
+class ActivityAspect implements Aspect
 {
     /**
      * @var LoggerInterface
@@ -26,10 +25,13 @@ class QueueAspect implements Aspect
      * Writes a log info before method execution
      *
      * @param MethodInvocation $invocation
-     * @Before("execution(public App\Api\V1\Controllers\IndexController->*(*))")
+     * @Before("execution(public **->*(*))")
      */
-    public function beforeMethod(MethodInvocation $invocation)
+    public function afterMethod(MethodInvocation $invocation)
     {
+        $redis = app()->make('redis');
+        $redis->publish('test-chanel', $invocation);
         $this->logger->info($invocation, $invocation->getArguments());
+
     }
 }

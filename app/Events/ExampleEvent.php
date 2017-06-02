@@ -1,9 +1,13 @@
 <?php
-
 namespace App\Events;
-
-class ExampleEvent extends Event
+use App\Events\Event as BaseEvent;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+class ExampleEvent extends BaseEvent implements ShouldBroadcast
 {
+    use SerializesModels;
+
+    public $data;
     /**
      * Create a new event instance.
      *
@@ -11,6 +15,16 @@ class ExampleEvent extends Event
      */
     public function __construct()
     {
-        //
+        $this->data = array('power'=> '10');
+    }
+
+    /**
+     * Get the channels the event should be broadcast on.
+     *
+     * @return array
+     */
+    public function broadcastOn()
+    {
+        return ['test-chanel'];
     }
 }

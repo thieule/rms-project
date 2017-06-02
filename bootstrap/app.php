@@ -87,6 +87,7 @@ $app->singleton(
  $app->register(App\Providers\ExceptionsServiceProvider::class);
  $app->register(RMS\Providers\RootServiceProvider::class);
  $app->register(RMS\Providers\GoAopServiceProvider::class);
+ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
